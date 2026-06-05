@@ -78,13 +78,13 @@ function Sync-DriveToLocal {
     }
 
     Step "drive -> local newer files"
-    robocopy $DrivePath $LocalPath /E /XO /XD .git .sync-logs /XF sync-all.ps1 install-sync-task.ps1 README-sync.md /R:2 /W:2 /NFL /NDL /NP
+    robocopy $DrivePath $LocalPath /E /XO /XD .git .sync-logs /XF sync-all.ps1 install-sync-task.ps1 README-sync.md /XJ /R:2 /W:2 /NFL /NDL /NP
     if ($LASTEXITCODE -gt 7) { throw "robocopy drive->local failed: $LASTEXITCODE" }
 }
 
 function Push-LocalToDrive {
     Step "local -> drive mirror"
-    robocopy $LocalPath $DrivePath /MIR /XD .git .sync-logs /R:2 /W:2 /NFL /NDL /NP
+    robocopy $LocalPath $DrivePath /MIR /XD .git .sync-logs /XJ /R:2 /W:2 /NFL /NDL /NP
     if ($LASTEXITCODE -gt 7) { throw "robocopy local->drive failed: $LASTEXITCODE" }
 }
 
@@ -119,5 +119,12 @@ Sync-DriveToLocal
 Push-GitHub
 Push-LocalToDrive
 
+$ObsidianSyncScript = Join-Path $LocalPath "sync-obsidian.ps1"
+if (Test-Path -LiteralPath $ObsidianSyncScript) {
+    Step "sync obsidian vault"
+    & $ObsidianSyncScript
+}
 Step "done"
 Stop-Transcript | Out-Null
+
+
