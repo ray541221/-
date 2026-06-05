@@ -91,16 +91,16 @@
 
     .work-grid {
       display: grid;
-      grid-template-columns: repeat(3, minmax(0, 1fr));
-      gap: 18px;
+      grid-template-columns: 1fr;
+      gap: 0;
       margin-top: 30px;
     }
 
     .work-item {
-      min-height: 220px;
+      min-height: min(58svh, 560px);
       padding: 22px;
-      border: 1px solid #e4e4e4;
-      background: #fafafa;
+      border: 1px solid #d8d8d8;
+      background: #fff;
     }
 
     .work-item strong {
@@ -160,6 +160,9 @@
 
   <main>
     <section id="works">
+      <div class="work-grid">
+        <div class="work-item" aria-label="影片作品空間"></div>
+      </div>
     </section>
 
     <section id="contact">
