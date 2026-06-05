@@ -35,12 +35,12 @@
     }
 
     .page-actions {
-      position: fixed;
-      right: 20px;
-      bottom: 74px;
+      position: absolute;
+      right: 28px;
+      bottom: 92px;
       z-index: 2;
       display: flex;
-      gap: 10px;
+      gap: 14px;
       flex-wrap: wrap;
       justify-content: flex-end;
     }
@@ -57,6 +57,12 @@
       text-decoration: none;
       cursor: pointer;
       backdrop-filter: blur(10px);
+    }
+
+    .page-link {
+      padding: 16px 24px;
+      font-size: 20px;
+      font-weight: 700;
     }
 
     .sound-toggle {
@@ -80,14 +86,20 @@
 
       .page-actions {
         right: max(14px, env(safe-area-inset-right));
-        bottom: calc(max(14px, env(safe-area-inset-bottom)) + 52px);
+        bottom: calc(max(14px, env(safe-area-inset-bottom)) + 64px);
         max-width: calc(100vw - 28px);
+        gap: 10px;
       }
 
       .page-link,
       .sound-toggle {
         padding: 11px 16px;
         font-size: 15px;
+      }
+
+      .page-link {
+        padding: 14px 18px;
+        font-size: 17px;
       }
 
       .sound-toggle {
