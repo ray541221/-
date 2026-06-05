@@ -20,6 +20,7 @@
     }
 
     main {
+      position: relative;
       width: 100vw;
       height: 100svh;
       background: #000;
@@ -33,11 +34,19 @@
       background: #000;
     }
 
-    .sound-toggle {
+    .page-actions {
       position: fixed;
       right: 20px;
-      bottom: 20px;
+      bottom: 74px;
       z-index: 2;
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .page-link,
+    .sound-toggle {
       border: 1px solid rgba(255, 255, 255, .45);
       border-radius: 999px;
       padding: 12px 18px;
@@ -45,8 +54,18 @@
       background: rgba(0, 0, 0, .62);
       font-size: 16px;
       line-height: 1;
+      text-decoration: none;
       cursor: pointer;
       backdrop-filter: blur(10px);
+    }
+
+    .sound-toggle {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 2;
+      padding: 16px 24px;
+      font-size: 18px;
     }
 
     @media (max-width: 768px), (max-aspect-ratio: 1/1) {
@@ -59,11 +78,23 @@
         object-fit: contain;
       }
 
+      .page-actions {
+        right: max(14px, env(safe-area-inset-right));
+        bottom: calc(max(14px, env(safe-area-inset-bottom)) + 52px);
+        max-width: calc(100vw - 28px);
+      }
+
+      .page-link,
+      .sound-toggle {
+        padding: 11px 16px;
+        font-size: 15px;
+      }
+
       .sound-toggle {
         right: max(14px, env(safe-area-inset-right));
         bottom: max(14px, env(safe-area-inset-bottom));
-        padding: 11px 16px;
-        font-size: 15px;
+        padding: 14px 22px;
+        font-size: 17px;
       }
     }
   </style>
@@ -71,6 +102,10 @@
 <body>
   <main>
     <video id="heroVideo" src="./網站首頁影音.mp4" autoplay muted loop playsinline controls></video>
+    <nav class="page-actions" aria-label="頁面導覽">
+      <a class="page-link" href="./page2.html#works">作品回顧</a>
+      <a class="page-link" href="./page2.html#contact">聯絡我們</a>
+    </nav>
     <button class="sound-toggle" id="soundToggle" type="button">開啟聲音</button>
   </main>
   <script>
