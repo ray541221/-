@@ -66,9 +66,9 @@
     }
 
     .sound-toggle {
-      position: fixed;
-      right: 20px;
-      bottom: 20px;
+      position: absolute;
+      right: 28px;
+      bottom: 164px;
       z-index: 2;
       padding: 16px 24px;
       font-size: 18px;
@@ -104,7 +104,7 @@
 
       .sound-toggle {
         right: max(14px, env(safe-area-inset-right));
-        bottom: max(14px, env(safe-area-inset-bottom));
+        bottom: calc(max(14px, env(safe-area-inset-bottom)) + 124px);
         padding: 14px 22px;
         font-size: 17px;
       }
