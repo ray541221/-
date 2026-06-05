@@ -32,11 +32,41 @@
       object-fit: cover;
       background: #000;
     }
+
+    .sound-toggle {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 2;
+      border: 1px solid rgba(255, 255, 255, .45);
+      border-radius: 999px;
+      padding: 12px 18px;
+      color: #fff;
+      background: rgba(0, 0, 0, .62);
+      font-size: 16px;
+      line-height: 1;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
   </style>
 </head>
 <body>
   <main>
-    <video src="./網站首頁影音.mp4" autoplay muted loop playsinline controls></video>
+    <video id="heroVideo" src="./網站首頁影音.mp4" autoplay muted loop playsinline controls></video>
+    <button class="sound-toggle" id="soundToggle" type="button">開啟聲音</button>
   </main>
+  <script>
+    const video = document.getElementById("heroVideo");
+    const soundToggle = document.getElementById("soundToggle");
+
+    soundToggle.addEventListener("click", async () => {
+      video.muted = !video.muted;
+      soundToggle.textContent = video.muted ? "開啟聲音" : "關閉聲音";
+
+      if (!video.muted && video.paused) {
+        await video.play();
+      }
+    });
+  </script>
 </body>
 </html>
