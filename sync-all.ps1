@@ -100,7 +100,14 @@ function Push-GitHub {
     }
 
     git -C $LocalPath branch -M $Branch
+    $previous = $ErrorActionPreference
+    $ErrorActionPreference = "Continue"
     git -C $LocalPath push -u origin $Branch
+    $pushExit = $LASTEXITCODE
+    $ErrorActionPreference = $previous
+    if ($pushExit -ne 0) {
+        Write-Host "GitHub push skipped; create the remote repo or login first." -ForegroundColor Yellow
+    }
 }
 
 Require-Command git
