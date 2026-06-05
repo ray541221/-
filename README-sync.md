@@ -2,7 +2,7 @@
 
 同步目標：
 - 本地：C:\Users\88692\Desktop\Codex
-- GitHub：https://github.com/88692/codex-backup.git
+- GitHub：https://github.com/ray541221/codex-backup.git
 - Google Drive：G:\我的雲端硬碟\codex-backup
 
 使用：

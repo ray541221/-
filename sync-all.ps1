@@ -2,7 +2,7 @@
 
 $LocalPath = "C:\Users\88692\Desktop\Codex"
 $DrivePath = "G:\我的雲端硬碟\codex-backup"
-$RemoteUrl = "https://github.com/88692/codex-backup.git"
+$RemoteUrl = "https://github.com/ray541221/codex-backup.git"
 $Branch = "main"
 $LogDir = Join-Path $LocalPath ".sync-logs"
 $LogFile = Join-Path $LogDir ("sync-{0}.log" -f (Get-Date -Format "yyyyMMdd-HHmmss"))
