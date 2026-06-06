@@ -42,20 +42,20 @@
 
     .page-actions {
       position: fixed;
-      right: 20px;
-      bottom: 20px;
+      left: 18px;
+      bottom: 58px;
       z-index: 2;
       display: flex;
       gap: 9px;
       flex-wrap: wrap;
-      justify-content: flex-end;
+      justify-content: flex-start;
     }
 
     .page-link {
-      border: 1px solid rgba(255, 255, 255, .45);
+      border: 1px solid rgba(255, 255, 255, .28);
       border-radius: 999px;
       padding: 12px 18px;
-      color: #fff;
+      color: rgba(255, 255, 255, .72);
       background: transparent;
       font-size: 16px;
       line-height: 1;
@@ -88,10 +88,12 @@
       }
 
       .page-actions {
+        left: auto;
         right: max(14px, env(safe-area-inset-right));
         bottom: max(12px, env(safe-area-inset-bottom));
         max-width: calc(100vw - 28px);
         gap: 8px;
+        justify-content: flex-end;
       }
 
       .page-link {
