@@ -40,6 +40,7 @@
       font-size: 18px;
       font-weight: 700;
       text-decoration: none;
+      margin-left: auto;
     }
 
     nav {
@@ -57,6 +58,14 @@
 
     section {
       padding: clamp(56px, 9vw, 110px) clamp(20px, 7vw, 90px);
+    }
+
+    #works {
+      padding-top: 18px;
+    }
+
+    .top-title {
+      margin: 0;
     }
 
     .intro {
@@ -146,8 +155,8 @@
 
     @media (max-width: 760px) {
       header {
-        align-items: flex-start;
-        flex-direction: column;
+        align-items: center;
+        flex-direction: row;
       }
 
       .work-grid,
@@ -163,12 +172,12 @@
 </head>
 <body>
   <header>
+    <h2 class="top-title">{{作品展示區}}</h2>
     <a class="brand" href="./index.html">回首頁</a>
   </header>
 
   <main>
     <section id="works">
-      <h2>{{作品展示區}}</h2>
       <div class="work-grid">
         <div class="work-item" aria-label="影片作品空間"></div>
       </div>
