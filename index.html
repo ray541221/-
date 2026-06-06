@@ -117,16 +117,5 @@
       </nav>
     </div>
   </main>
-  <script>
-    const video = document.getElementById("heroVideo");
-    const isMobileView = window.matchMedia("(max-width: 768px), (max-aspect-ratio: 1/1)");
-
-    function syncVideoControls() {
-      video.controls = !isMobileView.matches;
-    }
-
-    syncVideoControls();
-    isMobileView.addEventListener("change", syncVideoControls);
-  </script>
 </body>
 </html>
