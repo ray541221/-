@@ -12,7 +12,7 @@ $folders = @(
 
 $script:pendingSync = $false
 $script:lastEventAt = Get-Date "2000-01-01"
-$settleSeconds = 5
+$settleSeconds = 15
 
 $requestSync = {
   $script:pendingSync = $true

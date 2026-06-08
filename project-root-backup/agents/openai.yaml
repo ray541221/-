@@ -1,4 +1,4 @@
 interface:
   display_name: "設定根目錄路徑與備份"
-  short_description: "設定專案根目錄，並 5 秒後同步到 GitHub 與 Google Drive。"
-  default_prompt: "設定這個專案根目錄，內容變動後 5 秒同步到 Google Drive，並備份到 GitHub。"
+  short_description: "設定專案根目錄，並 15 秒後同步到 GitHub 與 Google Drive。"
+  default_prompt: "設定這個專案根目錄，內容變動後 15 秒同步到 Google Drive，並備份到 GitHub。"

@@ -1,6 +1,6 @@
 ---
 name: project-root-backup
-description: Set a Windows desktop folder as the root path for a named software/project, consolidate old backup folders into a new Google Drive backup folder named like `project-backup`, delete old empty folders, keep the project backed up to GitHub and Google Drive, and enable Google Drive mirror sync 5 seconds after file changes settle. Use when the user asks to set a desktop folder as a project root, create or use a `?-backup` folder, move old backups into the new backup folder, delete old backup folders, always back up to GitHub and Google Drive, or sync immediately when file contents change.
+description: Set a Windows desktop folder as the root path for a named software/project, consolidate old backup folders into a new Google Drive backup folder named like `project-backup`, delete old empty folders, keep the project backed up to GitHub and Google Drive, and enable Google Drive mirror sync 15 seconds after file changes settle. Use when the user asks to set a desktop folder as a project root, create or use a `?-backup` folder, move old backups into the new backup folder, delete old backup folders, always back up to GitHub and Google Drive, or sync shortly after file contents change.
 ---
 
 # 設定根目錄路徑與備份
@@ -13,7 +13,7 @@ Use this for the user's repeated pattern:
 2. Move old backup data into `G:\我的雲端硬碟\<backup-name>`.
 3. Delete old empty backup folders after verifying the destination path.
 4. Always back up to GitHub and Google Drive.
-5. Enable Google Drive mirror sync 5 seconds after the latest file change.
+5. Enable Google Drive mirror sync 15 seconds after the latest file change.
 
 ## Defaults
 
@@ -24,7 +24,7 @@ Use this for the user's repeated pattern:
 - Repo format: `ray541221/<project>-backup`
 - Root instruction file: `AGENTS.md`
 - Sync mode: mirror sync to keep Google Drive exactly consistent
-- Sync delay: 5 seconds after the latest file event, within the user's 5-30 second target
+- Sync delay: 15 seconds after the latest file event, within the user's 10-30 second stability target
 
 ## Run
 
@@ -53,7 +53,7 @@ Example:
 - Move old backup folder contents into the new backup folder, then delete only old paths that were explicitly provided or found by a targeted search.
 - Before deleting any folder, verify the resolved path is inside `G:\我的雲端硬碟` and is not the new backup folder.
 - Create a watcher script that monitors created, changed, deleted, and renamed events.
-- Wait 5 seconds after the latest file event before syncing.
-- Check watcher events once per second so sync happens within 5-30 seconds.
+- Wait 15 seconds after the latest file event before syncing.
+- Check watcher events once per second so sync happens within 10-30 seconds.
 - Create a Windows Startup shortcut so the watcher starts after login.
 - Commit and push after updating `AGENTS.md`.
