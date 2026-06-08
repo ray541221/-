@@ -56,4 +56,5 @@ Example:
 - Wait 15 seconds after the latest file event before syncing.
 - Check watcher events once per second so sync happens within 10-30 seconds.
 - Create a Windows Startup shortcut so the watcher starts after login.
+- Before reporting completion, run one simulation test against a disposable file in a synced folder: create the file, update it rapidly, verify the final content appears in Google Drive, delete it, and verify the Drive copy is removed.
 - Commit and push after updating `AGENTS.md`.
