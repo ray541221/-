@@ -3,7 +3,7 @@ name: project-root-backup
 description: Set a Windows desktop folder as the root path for a named software/project, consolidate old backup folders into a new Google Drive backup folder named like `project-backup`, delete old empty folders, and keep the project backed up to GitHub and Google Drive. Use when the user says to set a desktop folder as a project root, create or use a `?-backup` folder, move old backups into the new backup folder, delete old backup folders, or always back up to GitHub and Google Drive.
 ---
 
-# Project Root Backup
+# 設定根目錄路徑與備份
 
 ## Workflow
 

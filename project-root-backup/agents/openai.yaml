@@ -1,4 +1,4 @@
 interface:
-  display_name: "Project Root Backup"
-  short_description: "Set project roots and back up to GitHub and Google Drive."
-  default_prompt: "Set this project root and keep it backed up to GitHub and Google Drive."
+  display_name: "設定根目錄路徑與備份"
+  short_description: "設定專案根目錄，並備份到 GitHub 與 Google Drive。"
+  default_prompt: "設定這個專案根目錄，並永遠備份到 GitHub 與 Google Drive。"
