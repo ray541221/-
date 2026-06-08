@@ -51,6 +51,6 @@ Example:
 - Move old backup folder contents into the new backup folder, then delete only the old folder paths that were explicitly provided or found by a targeted search.
 - Before deleting any folder, verify the resolved path is inside `G:\我的雲端硬碟` and is not the new backup folder.
 - Create a watcher script that monitors created, changed, deleted, and renamed events.
-- Debounce repeated file events for 3 seconds.
+- Wait 5 seconds after the latest file event before syncing, keeping sync within the user's 5-30 second target.
 - Create a Windows Startup shortcut so the watcher starts after login.
 - Commit and push after updating `AGENTS.md`.

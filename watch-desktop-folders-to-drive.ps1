@@ -10,13 +10,17 @@ $folders = @(
   (Join-Path $desktop $scriptGen)
 )
 
-$sync = {
-  param($Path)
-  $now = Get-Date
-  if ($script:lastRun -and (($now - $script:lastRun).TotalSeconds -lt 3)) {
-    return
-  }
-  $script:lastRun = $now
+$script:pendingSync = $false
+$script:lastEventAt = Get-Date "2000-01-01"
+$settleSeconds = 5
+
+$requestSync = {
+  $script:pendingSync = $true
+  $script:lastEventAt = Get-Date
+}
+
+$runSync = {
+  $script:pendingSync = $false
   Start-Process powershell.exe -WindowStyle Hidden -ArgumentList @(
     "-NoProfile",
     "-ExecutionPolicy",
@@ -37,15 +41,18 @@ foreach ($folder in $folders) {
   $watcher.IncludeSubdirectories = $true
   $watcher.EnableRaisingEvents = $true
 
-  Register-ObjectEvent $watcher Created -Action { & $sync $Event.SourceEventArgs.FullPath } | Out-Null
-  Register-ObjectEvent $watcher Changed -Action { & $sync $Event.SourceEventArgs.FullPath } | Out-Null
-  Register-ObjectEvent $watcher Deleted -Action { & $sync $Event.SourceEventArgs.FullPath } | Out-Null
-  Register-ObjectEvent $watcher Renamed -Action { & $sync $Event.SourceEventArgs.FullPath } | Out-Null
+  Register-ObjectEvent $watcher Created -Action { & $requestSync } | Out-Null
+  Register-ObjectEvent $watcher Changed -Action { & $requestSync } | Out-Null
+  Register-ObjectEvent $watcher Deleted -Action { & $requestSync } | Out-Null
+  Register-ObjectEvent $watcher Renamed -Action { & $requestSync } | Out-Null
   $watchers += $watcher
 }
 
-& $sync "startup"
+& $runSync
 
 while ($true) {
-  Wait-Event -Timeout 60 | Out-Null
+  Wait-Event -Timeout 1 | Out-Null
+  if ($script:pendingSync -and (((Get-Date) - $script:lastEventAt).TotalSeconds -ge $settleSeconds)) {
+    & $runSync
+  }
 }

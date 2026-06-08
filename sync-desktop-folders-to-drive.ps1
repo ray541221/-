@@ -12,6 +12,42 @@ $pairs = @(
   @{ Source = Join-Path $desktop $scriptGen; Destination = Join-Path $driveRoot $scriptGen }
 )
 
+function Sync-Mirror($Source, $Destination) {
+  robocopy $Source $Destination /MIR /IS /Z /XA:H /W:5 /R:2 /XD .git node_modules .venv __pycache__ | Out-Host
+  $robocopyCode = $LASTEXITCODE
+
+  $excludedDirs = @(".git", "node_modules", ".venv", "__pycache__")
+  $sourceFiles = Get-ChildItem -LiteralPath $Source -Recurse -File -Force | Where-Object {
+    $relative = $_.FullName.Substring($Source.TrimEnd('\').Length).TrimStart('\')
+    $parts = $relative -split '[\\/]'
+    -not ($parts | Where-Object { $excludedDirs -contains $_ })
+  }
+
+  foreach ($file in $sourceFiles) {
+    $relative = $file.FullName.Substring($Source.TrimEnd('\').Length).TrimStart('\')
+    $target = Join-Path $Destination $relative
+    $targetDir = Split-Path -Parent $target
+    if (-not (Test-Path -LiteralPath $targetDir)) {
+      New-Item -ItemType Directory -Force -Path $targetDir | Out-Null
+    }
+
+    $copyNeeded = -not (Test-Path -LiteralPath $target)
+    if (-not $copyNeeded) {
+      $sourceHash = (Get-FileHash -LiteralPath $file.FullName -Algorithm SHA256).Hash
+      $targetHash = (Get-FileHash -LiteralPath $target -Algorithm SHA256).Hash
+      $copyNeeded = ($sourceHash -ne $targetHash)
+    }
+
+    if ($copyNeeded) {
+      Copy-Item -LiteralPath $file.FullName -Destination $target -Force
+    }
+  }
+
+  if ($robocopyCode -gt 7) {
+    throw "Robocopy failed: $robocopyCode"
+  }
+}
+
 foreach ($pair in $pairs) {
   if (-not (Test-Path -LiteralPath $pair.Source)) {
     New-Item -ItemType Directory -Force -Path $pair.Source | Out-Null
@@ -21,7 +57,7 @@ foreach ($pair in $pairs) {
     New-Item -ItemType Directory -Force -Path $pair.Destination | Out-Null
   }
 
-  robocopy $pair.Source $pair.Destination /MIR /FFT /Z /XA:H /W:5 /R:2 /XD .git node_modules .venv __pycache__ | Out-Host
+  Sync-Mirror $pair.Source $pair.Destination
 }
 
 Write-Host "DONE"

@@ -95,12 +95,17 @@ function Write-WatcherScript($RootPath, $BackupPath, $SyncScriptPath) {
 `$source = '$escapedRoot'
 `$destination = '$escapedBackup'
 `$syncScript = '$escapedSync'
-`$script:lastRun = Get-Date "2000-01-01"
+`$script:pendingSync = `$false
+`$script:lastEventAt = Get-Date "2000-01-01"
+`$settleSeconds = 5
 
-`$sync = {
-  `$now = Get-Date
-  if (((`$now - `$script:lastRun).TotalSeconds) -lt 3) { return }
-  `$script:lastRun = `$now
+`$requestSync = {
+  `$script:pendingSync = `$true
+  `$script:lastEventAt = Get-Date
+}
+
+`$runSync = {
+  `$script:pendingSync = `$false
   Start-Process powershell.exe -WindowStyle Hidden -ArgumentList @(
     "-NoProfile",
     "-ExecutionPolicy",
@@ -123,15 +128,18 @@ if (-not (Test-Path -LiteralPath `$source)) {
 `$watcher.IncludeSubdirectories = `$true
 `$watcher.EnableRaisingEvents = `$true
 
-Register-ObjectEvent `$watcher Created -Action { & `$sync } | Out-Null
-Register-ObjectEvent `$watcher Changed -Action { & `$sync } | Out-Null
-Register-ObjectEvent `$watcher Deleted -Action { & `$sync } | Out-Null
-Register-ObjectEvent `$watcher Renamed -Action { & `$sync } | Out-Null
+Register-ObjectEvent `$watcher Created -Action { & `$requestSync } | Out-Null
+Register-ObjectEvent `$watcher Changed -Action { & `$requestSync } | Out-Null
+Register-ObjectEvent `$watcher Deleted -Action { & `$requestSync } | Out-Null
+Register-ObjectEvent `$watcher Renamed -Action { & `$requestSync } | Out-Null
 
-& `$sync
+& `$runSync
 
 while (`$true) {
-  Wait-Event -Timeout 60 | Out-Null
+  Wait-Event -Timeout 1 | Out-Null
+  if (`$script:pendingSync -and (((Get-Date) - `$script:lastEventAt).TotalSeconds -ge `$settleSeconds)) {
+    & `$runSync
+  }
 }
 "@
   Set-Content -LiteralPath $watcherPath -Value $content -Encoding UTF8
