@@ -1,6 +1,6 @@
 ---
 name: project-root-backup
-description: Set a Windows desktop folder as the root path for a named software/project, consolidate old backup folders into a new Google Drive backup folder named like `project-backup`, delete old empty folders, keep the project backed up to GitHub and Google Drive, and optionally enable immediate Google Drive mirror sync when file contents change. Use when the user asks to set a desktop folder as a project root, create or use a `?-backup` folder, move old backups into the new backup folder, delete old backup folders, always back up to GitHub and Google Drive, or sync immediately on file changes.
+description: Set a Windows desktop folder as the root path for a named software/project, consolidate old backup folders into a new Google Drive backup folder named like `project-backup`, delete old empty folders, keep the project backed up to GitHub and Google Drive, and enable Google Drive mirror sync 5 seconds after file changes settle. Use when the user asks to set a desktop folder as a project root, create or use a `?-backup` folder, move old backups into the new backup folder, delete old backup folders, always back up to GitHub and Google Drive, or sync immediately when file contents change.
 ---
 
 # 設定根目錄路徑與備份
@@ -13,7 +13,7 @@ Use this for the user's repeated pattern:
 2. Move old backup data into `G:\我的雲端硬碟\<backup-name>`.
 3. Delete old empty backup folders after verifying the destination path.
 4. Always back up to GitHub and Google Drive.
-5. Enable immediate Google Drive sync when files are created, changed, deleted, or renamed.
+5. Enable Google Drive mirror sync 5 seconds after the latest file change.
 
 ## Defaults
 
@@ -24,6 +24,7 @@ Use this for the user's repeated pattern:
 - Repo format: `ray541221/<project>-backup`
 - Root instruction file: `AGENTS.md`
 - Sync mode: mirror sync to keep Google Drive exactly consistent
+- Sync delay: 5 seconds after the latest file event, within the user's 5-30 second target
 
 ## Run
 
@@ -47,10 +48,12 @@ Example:
 - If the folder is not a Git repo, run `git init`.
 - If the GitHub repo does not exist, create it with `gh repo create`.
 - If a remote exists, keep it unless it is clearly wrong for the requested backup repo.
-- Copy/sync project files to Google Drive with `.git` excluded.
-- Move old backup folder contents into the new backup folder, then delete only the old folder paths that were explicitly provided or found by a targeted search.
+- Mirror sync project files to Google Drive with `.git`, `node_modules`, `.venv`, and `__pycache__` excluded.
+- Use SHA256 comparison after `robocopy` so same-size quick edits still sync.
+- Move old backup folder contents into the new backup folder, then delete only old paths that were explicitly provided or found by a targeted search.
 - Before deleting any folder, verify the resolved path is inside `G:\我的雲端硬碟` and is not the new backup folder.
 - Create a watcher script that monitors created, changed, deleted, and renamed events.
-- Wait 5 seconds after the latest file event before syncing, keeping sync within the user's 5-30 second target.
+- Wait 5 seconds after the latest file event before syncing.
+- Check watcher events once per second so sync happens within 5-30 seconds.
 - Create a Windows Startup shortcut so the watcher starts after login.
 - Commit and push after updating `AGENTS.md`.
