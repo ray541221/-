@@ -1,6 +1,6 @@
 ---
 name: project-root-backup
-description: Set a Windows desktop folder as the root path for a named software/project, consolidate old backup folders into a new Google Drive backup folder named like `project-backup`, delete old empty folders, and keep the project backed up to GitHub and Google Drive. Use when the user says to set a desktop folder as a project root, create or use a `?-backup` folder, move old backups into the new backup folder, delete old backup folders, or always back up to GitHub and Google Drive.
+description: Set a Windows desktop folder as the root path for a named software/project, consolidate old backup folders into a new Google Drive backup folder named like `project-backup`, delete old empty folders, keep the project backed up to GitHub and Google Drive, and optionally enable immediate Google Drive mirror sync when file contents change. Use when the user asks to set a desktop folder as a project root, create or use a `?-backup` folder, move old backups into the new backup folder, delete old backup folders, always back up to GitHub and Google Drive, or sync immediately on file changes.
 ---
 
 # 設定根目錄路徑與備份
@@ -13,6 +13,7 @@ Use this for the user's repeated pattern:
 2. Move old backup data into `G:\我的雲端硬碟\<backup-name>`.
 3. Delete old empty backup folders after verifying the destination path.
 4. Always back up to GitHub and Google Drive.
+5. Enable immediate Google Drive sync when files are created, changed, deleted, or renamed.
 
 ## Defaults
 
@@ -22,6 +23,7 @@ Use this for the user's repeated pattern:
 - Backup folder format: `<project>-backup`
 - Repo format: `ray541221/<project>-backup`
 - Root instruction file: `AGENTS.md`
+- Sync mode: mirror sync to keep Google Drive exactly consistent
 
 ## Run
 
@@ -48,4 +50,7 @@ Example:
 - Copy/sync project files to Google Drive with `.git` excluded.
 - Move old backup folder contents into the new backup folder, then delete only the old folder paths that were explicitly provided or found by a targeted search.
 - Before deleting any folder, verify the resolved path is inside `G:\我的雲端硬碟` and is not the new backup folder.
+- Create a watcher script that monitors created, changed, deleted, and renamed events.
+- Debounce repeated file events for 3 seconds.
+- Create a Windows Startup shortcut so the watcher starts after login.
 - Commit and push after updating `AGENTS.md`.
