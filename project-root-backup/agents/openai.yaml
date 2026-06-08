@@ -1,0 +1,4 @@
+interface:
+  display_name: "Project Root Backup"
+  short_description: "Set project roots and back up to GitHub and Google Drive."
+  default_prompt: "Set this project root and keep it backed up to GitHub and Google Drive."
