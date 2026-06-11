@@ -28,6 +28,17 @@ if ($prePullStatus) {
 
 Invoke-Git -C $RepoPath pull --rebase origin $Branch
 
+robocopy $DrivePath $RepoPath /E /XO /XD .git /XJ /R:2 /W:2 /NFL /NDL /NP | Out-Host
+if ($LASTEXITCODE -gt 7) {
+  throw "robocopy drive to repo failed: $LASTEXITCODE"
+}
+
+Invoke-Git -C $RepoPath add -A
+$driveImportStatus = git -C $RepoPath status --porcelain
+if ($driveImportStatus) {
+  Invoke-Git -C $RepoPath commit -m ("sync drive imports: {0}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
+}
+
 robocopy $RepoPath $DrivePath /MIR /XD .git /XJ /R:2 /W:2 /NFL /NDL /NP | Out-Host
 if ($LASTEXITCODE -gt 7) {
   throw "robocopy failed: $LASTEXITCODE"
