@@ -4,12 +4,9 @@ $desktop = [Environment]::GetFolderPath("Desktop")
 $driveRoot = "G:\" + (-join ([char[]](25105,30340,38642,31471,30828,30879)))
 
 $websiteData = -join ([char[]](32178,31449,36039,26009))
-$scriptGen = -join ([char[]](33139,26412,29983,25104))
 
 $pairs = @(
-  @{ Source = Join-Path $desktop $websiteData; Destination = Join-Path $driveRoot $websiteData },
-  @{ Source = Join-Path $desktop "WTF"; Destination = Join-Path $driveRoot "WTF" },
-  @{ Source = Join-Path $desktop $scriptGen; Destination = Join-Path $driveRoot $scriptGen }
+  @{ Source = Join-Path $desktop $websiteData; Destination = Join-Path $driveRoot $websiteData }
 )
 
 function Sync-Mirror($Source, $Destination) {

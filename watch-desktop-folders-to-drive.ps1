@@ -3,11 +3,8 @@ $ErrorActionPreference = "Stop"
 $scriptPath = "C:\Users\88692\Desktop\Codex\sync-desktop-folders-to-drive.ps1"
 $desktop = [Environment]::GetFolderPath("Desktop")
 $websiteData = -join ([char[]](32178,31449,36039,26009))
-$scriptGen = -join ([char[]](33139,26412,29983,25104))
 $folders = @(
-  (Join-Path $desktop $websiteData),
-  (Join-Path $desktop "WTF"),
-  (Join-Path $desktop $scriptGen)
+  (Join-Path $desktop $websiteData)
 )
 
 $script:pendingSync = $false
