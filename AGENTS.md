@@ -6,5 +6,5 @@ C:\Users\88692\Desktop\Codex
 
 永遠備份：
 - GitHub：ray541221/codex-backup
-- Google Drive：G:\我的雲端硬碟\codex-backup
+- Google Drive：G:\我的雲端硬碟\網站資料
 </INSTRUCTIONS>
