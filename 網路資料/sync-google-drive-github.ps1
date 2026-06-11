@@ -1,8 +1,9 @@
 $ErrorActionPreference = "Stop"
 
-$RepoPath = "C:\Users\88692\Desktop\Codex"
+$RepoPath = Split-Path -Parent $PSScriptRoot
+$SitePath = $PSScriptRoot
 $DriveRoot = "G:\" + (-join ([char[]](25105,30340,38642,31471,30828,30879)))
-$WebsiteData = -join ([char[]](32178,31449,36039,26009))
+$WebsiteData = -join ([char[]](32178,36335,36039,26009))
 $VideoFile = (-join ([char[]](32178,31449,39318,38913,24433,38899))) + ".mp4"
 $DrivePath = Join-Path $DriveRoot $WebsiteData
 $Branch = "main"
@@ -46,7 +47,13 @@ function Purge-DriveExtras {
 
 function Purge-RepoExtras {
   Get-ChildItem -LiteralPath $RepoPath -Force | Where-Object {
-    $_.Name -ne ".git" -and $KeepFiles -notcontains $_.Name
+    $_.Name -ne ".git" -and $_.Name -ne $WebsiteData
+  } | Remove-Item -Recurse -Force
+}
+
+function Purge-SiteExtras {
+  Get-ChildItem -LiteralPath $SitePath -Force | Where-Object {
+    $KeepFiles -notcontains $_.Name
   } | Remove-Item -Recurse -Force
 }
 
@@ -61,16 +68,18 @@ function Commit-IfNeeded {
 Ensure-Folder $DrivePath
 
 Purge-RepoExtras
+Purge-SiteExtras
 Purge-DriveExtras
-Copy-KeepOnly $DrivePath $RepoPath $ContentFiles
-Copy-KeepOnly $RepoPath $DrivePath $KeepFiles
+Copy-KeepOnly $DrivePath $SitePath $ContentFiles
+Copy-KeepOnly $SitePath $DrivePath $KeepFiles
 Commit-IfNeeded
 
 Invoke-Git -C $RepoPath pull --rebase origin $Branch
 
 Purge-RepoExtras
+Purge-SiteExtras
 Purge-DriveExtras
-Copy-KeepOnly $RepoPath $DrivePath $KeepFiles
+Copy-KeepOnly $SitePath $DrivePath $KeepFiles
 Commit-IfNeeded
 
 Invoke-Git -C $RepoPath push origin $Branch
