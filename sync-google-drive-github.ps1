@@ -8,6 +8,14 @@ $DrivePath = Join-Path $DriveRoot $WebsiteData
 $Branch = "main"
 $SyncScript = "sync-google-drive-github.ps1"
 $KeepFiles = @("index.html", "page2.html", $VideoFile, $SyncScript)
+$ContentFiles = @("index.html", "page2.html", $VideoFile)
+
+function Invoke-Git {
+  & git @args
+  if ($LASTEXITCODE -ne 0) {
+    throw "git failed: git $($args -join ' ')"
+  }
+}
 
 function Ensure-Folder([string]$Path) {
   if (-not (Test-Path -LiteralPath $Path)) {
@@ -15,8 +23,14 @@ function Ensure-Folder([string]$Path) {
   }
 }
 
-function Copy-KeepOnly([string]$Source, [string]$Destination) {
-  foreach ($name in $KeepFiles) {
+function Copy-KeepOnly {
+  param(
+    [string]$Source,
+    [string]$Destination,
+    [string[]]$Files = $KeepFiles
+  )
+
+  foreach ($name in $Files) {
     $sourceFile = Join-Path $Source $name
     if (Test-Path -LiteralPath $sourceFile) {
       Copy-Item -LiteralPath $sourceFile -Destination (Join-Path $Destination $name) -Force
@@ -30,20 +44,35 @@ function Purge-DriveExtras {
   } | Remove-Item -Recurse -Force
 }
 
-Ensure-Folder $DrivePath
-
-git -C $RepoPath pull --rebase origin $Branch
-
-Copy-KeepOnly $DrivePath $RepoPath
-Copy-KeepOnly $RepoPath $DrivePath
-Purge-DriveExtras
-
-git -C $RepoPath add -- index.html page2.html $VideoFile $SyncScript
-$status = git -C $RepoPath status --porcelain
-if ($status) {
-  git -C $RepoPath commit -m ("sync website: {0}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
+function Purge-RepoExtras {
+  Get-ChildItem -LiteralPath $RepoPath -Force | Where-Object {
+    $_.Name -ne ".git" -and $KeepFiles -notcontains $_.Name
+  } | Remove-Item -Recurse -Force
 }
 
-git -C $RepoPath push origin $Branch
+function Commit-IfNeeded {
+  Invoke-Git -C $RepoPath add -A
+  $status = git -C $RepoPath status --porcelain
+  if ($status) {
+    Invoke-Git -C $RepoPath commit -m ("sync website: {0}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
+  }
+}
+
+Ensure-Folder $DrivePath
+
+Purge-RepoExtras
+Purge-DriveExtras
+Copy-KeepOnly $DrivePath $RepoPath $ContentFiles
+Copy-KeepOnly $RepoPath $DrivePath $KeepFiles
+Commit-IfNeeded
+
+Invoke-Git -C $RepoPath pull --rebase origin $Branch
+
+Purge-RepoExtras
+Purge-DriveExtras
+Copy-KeepOnly $RepoPath $DrivePath $KeepFiles
+Commit-IfNeeded
+
+Invoke-Git -C $RepoPath push origin $Branch
 
 Write-Host "DONE"
