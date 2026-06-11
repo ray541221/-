@@ -2,7 +2,7 @@ $ErrorActionPreference = "Stop"
 
 $RepoPath = "C:\Users\88692\Desktop\Codex"
 $DriveRoot = "G:\" + (-join ([char[]](25105,30340,38642,31471,30828,30879)))
-$DrivePath = Join-Path $DriveRoot "Codex"
+$DrivePath = Join-Path $DriveRoot "codex-backup"
 $Branch = "main"
 
 function Invoke-Git {
