@@ -1,9 +1,12 @@
 $ErrorActionPreference = "Stop"
 
 $RepoPath = "C:\Users\88692\Desktop\Codex"
-$DrivePath = "G:\我的雲端硬碟\網站資料"
+$DriveRoot = "G:\" + (-join ([char[]](25105,30340,38642,31471,30828,30879)))
+$WebsiteData = -join ([char[]](32178,31449,36039,26009))
+$VideoFile = (-join ([char[]](32178,31449,39318,38913,24433,38899))) + ".mp4"
+$DrivePath = Join-Path $DriveRoot $WebsiteData
 $Branch = "main"
-$KeepFiles = @("index.html", "page2.html", "網站首頁影音.mp4")
+$KeepFiles = @("index.html", "page2.html", $VideoFile)
 
 function Ensure-Folder([string]$Path) {
   if (-not (Test-Path -LiteralPath $Path)) {
@@ -11,17 +14,17 @@ function Ensure-Folder([string]$Path) {
   }
 }
 
-function Copy-KeepFiles([string]$Source, [string]$Destination) {
-  Ensure-Folder $Destination
-
+function Copy-KeepOnly([string]$Source, [string]$Destination) {
   foreach ($name in $KeepFiles) {
     $sourceFile = Join-Path $Source $name
     if (Test-Path -LiteralPath $sourceFile) {
       Copy-Item -LiteralPath $sourceFile -Destination (Join-Path $Destination $name) -Force
     }
   }
+}
 
-  Get-ChildItem -LiteralPath $Destination -Force | Where-Object {
+function Purge-DriveExtras {
+  Get-ChildItem -LiteralPath $DrivePath -Force | Where-Object {
     $KeepFiles -notcontains $_.Name
   } | Remove-Item -Recurse -Force
 }
@@ -30,10 +33,11 @@ Ensure-Folder $DrivePath
 
 git -C $RepoPath pull --rebase origin $Branch
 
-Copy-KeepFiles $DrivePath $RepoPath
-Copy-KeepFiles $RepoPath $DrivePath
+Copy-KeepOnly $DrivePath $RepoPath
+Copy-KeepOnly $RepoPath $DrivePath
+Purge-DriveExtras
 
-git -C $RepoPath add -- index.html page2.html "網站首頁影音.mp4"
+git -C $RepoPath add -- index.html page2.html $VideoFile sync-google-drive-github.ps1
 $status = git -C $RepoPath status --porcelain
 if ($status) {
   git -C $RepoPath commit -m ("sync website: {0}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
