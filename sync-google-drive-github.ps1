@@ -6,7 +6,8 @@ $WebsiteData = -join ([char[]](32178,31449,36039,26009))
 $VideoFile = (-join ([char[]](32178,31449,39318,38913,24433,38899))) + ".mp4"
 $DrivePath = Join-Path $DriveRoot $WebsiteData
 $Branch = "main"
-$KeepFiles = @("index.html", "page2.html", $VideoFile)
+$SyncScript = "sync-google-drive-github.ps1"
+$KeepFiles = @("index.html", "page2.html", $VideoFile, $SyncScript)
 
 function Ensure-Folder([string]$Path) {
   if (-not (Test-Path -LiteralPath $Path)) {
@@ -37,7 +38,7 @@ Copy-KeepOnly $DrivePath $RepoPath
 Copy-KeepOnly $RepoPath $DrivePath
 Purge-DriveExtras
 
-git -C $RepoPath add -- index.html page2.html $VideoFile sync-google-drive-github.ps1
+git -C $RepoPath add -- index.html page2.html $VideoFile $SyncScript
 $status = git -C $RepoPath status --porcelain
 if ($status) {
   git -C $RepoPath commit -m ("sync website: {0}" -f (Get-Date -Format "yyyy-MM-dd HH:mm:ss"))
