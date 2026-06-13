@@ -21,6 +21,7 @@
     .viewer img { max-width: 100%; max-height: 100%; object-fit: contain; display: block; }
     .viewer button { position: absolute; z-index: 21; border: 1px solid rgba(255,255,255,.5); color: #fff; background: rgba(0,0,0,.35); font: inherit; cursor: pointer; }
     .viewer-close { top: 18px; right: 18px; width: 44px; height: 44px; font-size: 30px; line-height: 1; }
+    .viewer-fullscreen { top: 18px; left: 18px; min-width: 92px; height: 44px; padding: 0 14px; font-size: 16px; font-weight: 700; }
     .viewer-prev, .viewer-next { top: 50%; width: 48px; height: 64px; transform: translateY(-50%); font-size: 42px; line-height: 1; }
     .viewer-prev { left: 18px; }
     .viewer-next { right: 18px; }
@@ -124,6 +125,7 @@
   </main>
   <div class="viewer" id="viewer" aria-hidden="true">
     <button class="viewer-close" type="button" aria-label="關閉">×</button>
+    <button class="viewer-fullscreen" type="button">全螢幕</button>
     <button class="viewer-prev" type="button" aria-label="上一張">‹</button>
     <div class="viewer-frame">
       <img alt="">
@@ -135,6 +137,7 @@
     const viewer = document.querySelector('#viewer');
     const viewerImage = viewer.querySelector('img');
     const closeButton = viewer.querySelector('.viewer-close');
+    const fullscreenButton = viewer.querySelector('.viewer-fullscreen');
     const prevButton = viewer.querySelector('.viewer-prev');
     const nextButton = viewer.querySelector('.viewer-next');
     let currentIndex = 0;
@@ -151,6 +154,9 @@
       viewer.classList.add('open');
       viewer.setAttribute('aria-hidden', 'false');
       document.body.style.overflow = 'hidden';
+    }
+
+    function requestViewerFullscreen() {
       if (viewer.requestFullscreen) {
         viewer.requestFullscreen().catch(() => {});
       }
@@ -167,6 +173,7 @@
 
     images.forEach((image, index) => image.addEventListener('click', () => openViewer(index)));
     closeButton.addEventListener('click', closeViewer);
+    fullscreenButton.addEventListener('click', requestViewerFullscreen);
     prevButton.addEventListener('click', () => showImage(currentIndex - 1));
     nextButton.addEventListener('click', () => showImage(currentIndex + 1));
     viewer.addEventListener('click', (event) => {
