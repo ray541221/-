@@ -100,22 +100,25 @@
 
     .work-grid {
       display: grid;
-      grid-template-columns: 1fr;
-      gap: 0;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 18px;
       margin-top: 30px;
     }
 
     .work-item {
       min-height: min(58svh, 560px);
+      display: grid;
+      place-items: center;
       padding: 22px;
       border: 1px solid #d8d8d8;
       background: #fff;
+      text-align: center;
     }
 
     .work-item strong {
       display: block;
-      margin-bottom: 12px;
-      font-size: 20px;
+      font-size: clamp(22px, 3vw, 36px);
+      line-height: 1.25;
     }
 
     .contact-box {
@@ -179,7 +182,12 @@
   <main>
     <section id="works">
       <div class="work-grid">
-        <div class="work-item" aria-label="影片作品空間"></div>
+        <div class="work-item" aria-label="房地產廣告行銷">
+          <strong>房地產廣告行銷</strong>
+        </div>
+        <div class="work-item" aria-label="商業廣告行銷">
+          <strong>商業廣告行銷</strong>
+        </div>
       </div>
     </section>
 
