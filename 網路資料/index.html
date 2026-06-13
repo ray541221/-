@@ -64,6 +64,23 @@
       backdrop-filter: blur(10px);
     }
 
+    .audio-toggle {
+      position: fixed;
+      top: 20px;
+      left: 20px;
+      z-index: 3;
+      border: 1px solid rgba(255, 255, 255, .5);
+      border-radius: 999px;
+      padding: 11px 16px;
+      color: rgba(255, 255, 255, .75);
+      background: transparent;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 1;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+    }
+
     .page-link {
       padding: 11px 16px;
       font-size: 14px;
@@ -109,6 +126,15 @@
         font-size: 13px;
       }
 
+      .audio-toggle {
+        top: max(12px, env(safe-area-inset-top));
+        left: max(14px, env(safe-area-inset-left));
+        border-color: rgba(255, 215, 0, .5);
+        color: rgba(255, 215, 0, .65);
+        padding: 9px 13px;
+        font-size: 13px;
+      }
+
     }
   </style>
 </head>
@@ -116,11 +142,39 @@
   <main>
     <div class="video-stage">
       <video id="heroVideo" src="./網站首頁影音.mp4" autoplay muted loop playsinline controls></video>
+      <button class="audio-toggle" id="audioToggle" type="button" aria-pressed="false">開啟背景音樂</button>
       <nav class="page-actions" aria-label="頁面導覽">
         <a class="page-link" href="./page2.html#works">作品展示區</a>
         <a class="page-link" href="./page2.html#contact">聯絡我們</a>
       </nav>
     </div>
   </main>
+  <script>
+    const heroVideo = document.querySelector('#heroVideo');
+    const audioToggle = document.querySelector('#audioToggle');
+
+    function updateAudioButton() {
+      const soundOn = !heroVideo.muted && heroVideo.volume > 0;
+      audioToggle.textContent = soundOn ? '關閉背景音樂' : '開啟背景音樂';
+      audioToggle.setAttribute('aria-pressed', soundOn ? 'true' : 'false');
+    }
+
+    async function setAudio(enabled) {
+      heroVideo.muted = !enabled;
+      heroVideo.volume = enabled ? 1 : 0;
+      try {
+        await heroVideo.play();
+      } catch (error) {
+        heroVideo.muted = true;
+      }
+      updateAudioButton();
+    }
+
+    audioToggle.addEventListener('click', () => {
+      setAudio(heroVideo.muted || heroVideo.volume === 0);
+    });
+    heroVideo.addEventListener('volumechange', updateAudioButton);
+    updateAudioButton();
+  </script>
 </body>
 </html>
