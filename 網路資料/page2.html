@@ -27,7 +27,7 @@
       z-index: 2;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      justify-content: center;
       gap: 16px;
       padding: 18px clamp(18px, 5vw, 56px);
       background: rgba(255, 255, 255, .9);
@@ -40,7 +40,8 @@
       font-size: 18px;
       font-weight: 700;
       text-decoration: none;
-      margin-left: auto;
+      position: absolute;
+      right: clamp(18px, 5vw, 56px);
     }
 
     nav {
@@ -66,6 +67,7 @@
 
     .top-title {
       margin: 0;
+      text-align: center;
     }
 
     .intro {
