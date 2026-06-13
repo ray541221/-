@@ -106,7 +106,7 @@
     }
 
     .work-item {
-      `r`n      color: inherit;`r`n      text-decoration: none;min-height: min(58svh, 560px);
+      min-height: min(58svh, 560px);
       display: grid;
       place-items: center;
       padding: 22px;
@@ -114,7 +114,9 @@
       overflow: hidden;
       border: 1px solid #d8d8d8;
       background: #fff;
+      color: inherit;
       text-align: center;
+      text-decoration: none;
     }
 
     .work-item strong {
@@ -212,13 +214,28 @@
         flex-direction: row;
       }
 
-      .work-grid,
+      #works {
+        padding-inline: 12px;
+      }
+
+      .work-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 10px;
+      }
+
       .contact-box {
         grid-template-columns: 1fr;
       }
 
       .work-item {
-        `r`n      color: inherit;`r`n      text-decoration: none;min-height: 160px;
+        min-height: clamp(190px, 36svh, 260px);
+      }
+
+      .work-cover strong {
+        right: 8px;
+        bottom: 8px;
+        padding: 7px 8px;
+        font-size: 16px;
       }
 
       .real-estate-gallery,
@@ -240,10 +257,13 @@
         <a class="work-item work-cover" href="./房地產廣告行銷.html" aria-label="房地產廣告行銷">
           <img src="./assets/房地產廣告行銷封面.jpeg" alt="房地產廣告行銷封面">
           <strong>房地產廣告行銷</strong>
-        </a>`r`n        <a class="work-item work-cover" href="./商業廣告行銷.html" aria-label="商業廣告行銷">
+        </a>
+        <a class="work-item work-cover" href="./商業廣告行銷.html" aria-label="商業廣告行銷">
           <img src="./assets/商業廣告行銷封面.jpg" alt="商業廣告行銷封面">
           <strong>商業廣告行銷</strong>
-        </a>`r`n      </div>`r`n    </section>
+        </a>
+      </div>
+    </section>
 
     <section id="contact">
       <div class="contact-box">
