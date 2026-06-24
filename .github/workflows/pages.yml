@@ -1,4 +1,4 @@
-name: Deploy codex-backup website
+name: Deploy Nirvana_Studio website
 
 on:
   push:
@@ -31,7 +31,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 網路資料
+          path: Nirvana_Studio
 
       - name: Deploy
         id: deployment
